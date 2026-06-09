@@ -25,3 +25,11 @@ Saved under the selected `--output-dir`:
 - `confusion_matrix_random_forest.png`
 - `roc_curves.png`
 - `shap_top_contributions.csv` (or `lime_explanations.txt` if SHAP is unavailable)
+
+## Output Preview
+
+![ROC Curves](outputs/roc_curves.png)
+
+![Confusion Matrix (Logistic Regression)](outputs/confusion_matrix_logistic_regression.png)
+
+![Confusion Matrix (Random Forest)](outputs/confusion_matrix_random_forest.png)
