@@ -72,7 +72,7 @@ def train_models(
                 ("preprocessor", clone(preprocessor)),
                 (
                     "classifier",
-                    LogisticRegression(max_iter=2000, solver="lbfgs", n_jobs=None),
+                    LogisticRegression(max_iter=2000, solver="lbfgs"),
                 ),
             ]
         ),
@@ -104,7 +104,7 @@ def evaluate_models(
 
     roc_scores: Dict[str, float] = {}
 
-    plt.figure(figsize=(8, 6))
+    fig, roc_ax = plt.subplots(figsize=(8, 6))
     for name, model in models.items():
         y_pred = model.predict(X_test)
         y_proba = model.predict_proba(X_test)[:, 1]
@@ -117,19 +117,20 @@ def evaluate_models(
         print(f"F1-score: {f1:.4f}")
         print(f"ROC-AUC: {roc_auc:.4f}")
 
-        ConfusionMatrixDisplay.from_predictions(y_test, y_pred)
-        plt.title(f"Confusion Matrix - {name}")
-        plt.tight_layout()
-        plt.savefig(os.path.join(output_dir, f"confusion_matrix_{name}.png"))
-        plt.close()
+        cm_fig, cm_ax = plt.subplots(figsize=(6, 5))
+        ConfusionMatrixDisplay.from_predictions(y_test, y_pred, ax=cm_ax)
+        cm_ax.set_title(f"Confusion Matrix - {name}")
+        cm_fig.tight_layout()
+        cm_fig.savefig(os.path.join(output_dir, f"confusion_matrix_{name}.png"))
+        plt.close(cm_fig)
 
-        RocCurveDisplay.from_predictions(y_test, y_proba, name=name)
+        RocCurveDisplay.from_predictions(y_test, y_proba, name=name, ax=roc_ax)
 
-    plt.plot([0, 1], [0, 1], "k--", label="Random")
-    plt.title("ROC Curves")
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, "roc_curves.png"))
-    plt.close()
+    roc_ax.plot([0, 1], [0, 1], "k--", label="Random")
+    roc_ax.set_title("ROC Curves")
+    fig.tight_layout()
+    fig.savefig(os.path.join(output_dir, "roc_curves.png"))
+    plt.close(fig)
 
     return roc_scores
 
@@ -277,7 +278,7 @@ def main() -> None:
     models = train_models(X_train, y_train, preprocessor)
     roc_scores = evaluate_models(models, X_test, y_test, args.output_dir)
 
-    best_model_name = max(roc_scores, key=roc_scores.get)
+    best_model_name = max(roc_scores, key=lambda name: roc_scores[name])
     best_model = models[best_model_name]
 
     method, explanation_path = explain_predictions(

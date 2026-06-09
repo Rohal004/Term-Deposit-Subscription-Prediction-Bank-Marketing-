@@ -3,7 +3,7 @@
 Predict whether a bank customer will subscribe to a term deposit as a result of a marketing campaign.
 
 ## Objective Coverage
-The implementation in `/tmp/workspace/Rohal004/Term-Deposit-Subscription-Prediction-Bank-Marketing-/bank_marketing_prediction.py` now covers:
+The implementation in `bank_marketing_prediction.py` now covers:
 - Loading and exploring the UCI Bank Marketing dataset
 - Proper encoding of categorical features (One-Hot Encoding)
 - Training classification models (Logistic Regression and Random Forest)
@@ -12,7 +12,7 @@ The implementation in `/tmp/workspace/Rohal004/Term-Deposit-Subscription-Predict
 
 ## Run
 ```bash
-python /tmp/workspace/Rohal004/Term-Deposit-Subscription-Prediction-Bank-Marketing-/bank_marketing_prediction.py --output-dir /tmp/workspace/Rohal004/Term-Deposit-Subscription-Prediction-Bank-Marketing-/outputs
+python bank_marketing_prediction.py --output-dir outputs
 ```
 
 ### Optional arguments
